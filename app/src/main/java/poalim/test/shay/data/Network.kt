@@ -1,11 +1,6 @@
-package poalim.test.shay.view.model
+package poalim.test.shay.data
 
-import android.widget.ImageView
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import okhttp3.ResponseBody
-import poalim.test.shay.MovieApi
-import poalim.test.shay.model.Movie
 import poalim.test.shay.model.Movies
 import retrofit2.Call
 import retrofit2.Callback
@@ -27,9 +22,9 @@ class Network
         mApi = mRetrofit!!.create(MovieApi::class.java)
     }
 
-    fun getMovieList(live : MutableLiveData<Movies>)
+    fun getMovieList(live : MutableLiveData<Movies>, startDate : String, endDate : String)
     {
-        var call = mApi?.getLatestMoviesList()
+        var call = mApi?.getLatestMoviesList(startDate,endDate)
         call?.enqueue(object : Callback<Movies> {
 
             override fun onResponse(call: Call<Movies>?, response: Response<Movies>?) {
@@ -38,7 +33,6 @@ class Network
             }
 
             override fun onFailure(call: Call<Movies>?, t: Throwable?) {
-
             }
         })
     }

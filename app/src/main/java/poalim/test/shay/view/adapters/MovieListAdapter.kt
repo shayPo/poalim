@@ -7,12 +7,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import kotlinx.android.synthetic.main.activity_movie.*
 import kotlinx.android.synthetic.main.movie_list_item.view.*
 import poalim.test.shay.R
 import poalim.test.shay.model.Movie
 import poalim.test.shay.view.model.Network
 
-class MovieListAdapter() : RecyclerView.Adapter<MovieListAdapter.MovieHolder>() {
+class MovieListAdapter(val listener : OnItemClickListener) : RecyclerView.Adapter<MovieListAdapter.MovieHolder>() {
 
     private var mData: List<Movie> = emptyList()
 
@@ -30,22 +31,29 @@ class MovieListAdapter() : RecyclerView.Adapter<MovieListAdapter.MovieHolder>() 
     }
 
     override fun onBindViewHolder(holder: MovieHolder, position: Int) {
-        holder.bind(mData[position])
+        holder.bind(mData[position], listener)
     }
 
-    class MovieHolder(v: View) : RecyclerView.ViewHolder(v) {
+    class MovieHolder(val v: View) : RecyclerView.ViewHolder(v) {
 
-        private var mTitle: TextView
-        private var mPoster: ImageView
+
+        private var mTitle : TextView
+        private var mPoster : ImageView
+        private var mFavorite : ImageView
 
         init {
             mTitle = v.title
             mPoster = v.poster
+            mFavorite = v.favorite
         }
 
-        fun bind(data: Movie) {
+        fun bind(data: Movie, listener: OnItemClickListener) {
             mTitle.text = data.mTitle
-            Glide.with(mPoster).load(Network.IMAGE_URL + data.mPosterPath).into(mPoster)
+            Glide.with(v.context.applicationContext).load(Network.IMAGE_URL + data.mPosterPath).into(mPoster)
+            v.setOnClickListener(View.OnClickListener {
+                listener.onItemClick(data)
+            })
+            mFavorite.setImageResource(if(!data.mFavorite)  R.drawable.not_like else R.drawable.like)
         }
     }
 }
