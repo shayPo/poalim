@@ -21,7 +21,7 @@ import com.google.gson.annotations.SerializedName
 "vote_average":6.4,
 "overview":"The true story of Forrest Tucker, from his audacious escape from San Quentin at the age of 70 to an unprecedented string of heists that confounded authorities and enchanted the public. Wrapped up in the pursuit are a detective, who becomes captivated with Forrest’s commitment to his craft, and a woman, who loves him in spite of his chosen profession.",
 "release_date":"2018-09-28"}*/
-@Entity
+@Entity(tableName = "movie")
 class Movie() : Parcelable {
 
     @SerializedName("poster_path")
@@ -55,7 +55,7 @@ class Movie() : Parcelable {
     var mRating = ""
 
     @ColumnInfo(name = "is_favorite")
-    var mFavorite = false
+    var mFavorite = 0
 
     constructor(parcel: Parcel) : this() {
         mPosterPath = parcel.readString()
@@ -65,7 +65,7 @@ class Movie() : Parcelable {
         mOverview = parcel.readString()
         mReleaseDate = parcel.readString()
         mRating = parcel.readString()
-        mFavorite = parcel.readInt() == 1
+        mFavorite = parcel.readInt()
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -76,7 +76,7 @@ class Movie() : Parcelable {
         parcel.writeString(mOverview + "")
         parcel.writeString(mReleaseDate + "")
         parcel.writeString(mRating + "")
-        parcel.writeInt(if (mFavorite) 1 else 0)
+        parcel.writeInt(mFavorite)
     }
 
     override fun describeContents(): Int {

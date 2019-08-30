@@ -10,8 +10,8 @@ import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_movie.*
 import kotlinx.android.synthetic.main.movie_list_item.view.*
 import poalim.test.shay.R
+import poalim.test.shay.data.Network
 import poalim.test.shay.model.Movie
-import poalim.test.shay.view.model.Network
 
 class MovieListAdapter(val listener : OnItemClickListener) : RecyclerView.Adapter<MovieListAdapter.MovieHolder>() {
 
@@ -27,7 +27,7 @@ class MovieListAdapter(val listener : OnItemClickListener) : RecyclerView.Adapte
     }
 
     override fun getItemCount(): Int {
-        return mData.size
+        return if(mData == null) 0 else mData.size
     }
 
     override fun onBindViewHolder(holder: MovieHolder, position: Int) {
@@ -50,10 +50,9 @@ class MovieListAdapter(val listener : OnItemClickListener) : RecyclerView.Adapte
         fun bind(data: Movie, listener: OnItemClickListener) {
             mTitle.text = data.mTitle
             Glide.with(v.context.applicationContext).load(Network.IMAGE_URL + data.mPosterPath).into(mPoster)
-            v.setOnClickListener(View.OnClickListener {
-                listener.onItemClick(data)
-            })
-            mFavorite.setImageResource(if(!data.mFavorite)  R.drawable.not_like else R.drawable.like)
+            v.setOnClickListener{ listener.onItemClick(data) }
+            mFavorite.setOnClickListener{ listener.onLikeClick(data) }
+            mFavorite.setImageResource(if(data.mFavorite == 0)  R.drawable.not_like else R.drawable.like)
         }
     }
 }

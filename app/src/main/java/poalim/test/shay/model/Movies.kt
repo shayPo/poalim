@@ -5,9 +5,9 @@ import com.google.gson.annotations.SerializedName
 class Movies
 {
     @SerializedName("results")
-    var mData : List<Movie> = emptyList()
+    var mData : MutableList<Movie> = mutableListOf()
 
     fun getData(): List<Movie> {
-      return mData
+        return mData
     }
 }

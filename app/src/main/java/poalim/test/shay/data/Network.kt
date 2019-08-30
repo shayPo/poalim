@@ -29,7 +29,9 @@ class Network
 
             override fun onResponse(call: Call<Movies>?, response: Response<Movies>?) {
                 val movies = response?.body()
-                live.postValue(movies)
+                Repository.Instance()!!.updateDateBase(movies!!.mData)
+                live.value?.mData?.addAll(movies!!.mData)
+                live.postValue(live.value)
             }
 
             override fun onFailure(call: Call<Movies>?, t: Throwable?) {
