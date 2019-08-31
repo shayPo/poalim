@@ -23,7 +23,7 @@ class MovieActivity : AppCompatActivity()
         setContentView(R.layout.activity_movie)
         mMovieViewModel = ViewModelProviders.of(this, MovieViewModelFactory(intent.getParcelableExtra(MOVIE_DATA))).get(MovieViewModel::class.java)
         mMovieViewModel!!.getMovie().observe(this, Observer<Movie>{ movie ->
-                if(!movie.mBackdropPath.isNullOrBlank()) {
+                if(movie.mBackdropPath != null && !movie.mBackdropPath.isBlank()) {
                     Glide
                         .with(this@MovieActivity.applicationContext)
                         .load(Network.IMAGE_URL + movie.mBackdropPath)
