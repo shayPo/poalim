@@ -31,8 +31,7 @@ class Repository(context : Context)
         mEndTime = mSharedPre!!.getLong(context.getString(R.string.end_key), 0)
     }
 
-    fun getMovieList(live : MutableLiveData<Movies>)
-    {
+    fun getMovieList(live : MutableLiveData<Movies>) {
         val format = SimpleDateFormat("yyyy-MM-dd")
         val calendar = Calendar.getInstance()
         val endDate = calendar.timeInMillis
@@ -56,18 +55,16 @@ class Repository(context : Context)
         {
             mNetwork!!.getMovieList(live, format.format(mStartTime), format.format(mEndTime))
         }
-
         updateDates()
     }
 
-    fun updateDateBase(movies: List<Movie>)
-    {
-        mDataBase?.insertMovies(movies)
-    }
+    fun getFavorites(live : MutableLiveData<Movies>){ mDataBase!!.getFavorites(live) }
 
-    fun setLikeValue(movie: Movie) {
-        mDataBase?.updateMovie(movie)
-    }
+    fun getDataBaseList(live : MutableLiveData<Movies>){ mDataBase!!.getAllMovieList(live) }
+
+    fun updateDataBase(movies: List<Movie>) { mDataBase?.insertMovies(movies) }
+
+    fun setLikeValue(movie: Movie) { mDataBase?.updateMovie(movie) }
 
     private fun updateDates() {
          mSharedPre!!.edit {

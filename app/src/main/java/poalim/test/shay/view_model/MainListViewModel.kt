@@ -6,26 +6,28 @@ import androidx.lifecycle.ViewModel
 import poalim.test.shay.data.Repository
 import poalim.test.shay.model.Movie
 import poalim.test.shay.model.Movies
-import java.text.SimpleDateFormat
-import java.util.*
 
 class MainListViewModel : ViewModel() {
     private var mRepository : Repository? = null
     private val mMovieList = MutableLiveData<Movies>()
-
+    private var mAfterUpdate = false
 
     init {
         mMovieList.value = Movies()
     }
 
     fun updateMovieList(){
-        mRepository = Repository.Instance()
-        mRepository!!.getMovieList(mMovieList)
+        if(!mAfterUpdate) {
+            mAfterUpdate = true
+            mRepository = Repository.Instance()
+            mRepository!!.getMovieList(mMovieList)
+        }
+        else{
+            mRepository!!.getDataBaseList(mMovieList)
+        }
     }
 
-    fun getMovies(): LiveData<Movies> {
-        return mMovieList
-    }
+    fun getMovies(): LiveData<Movies> { return mMovieList }
 
     fun onLikeClick(data: Movie) {
         if(data.mFavorite == 0) data.mFavorite = 1 else data.mFavorite = 0

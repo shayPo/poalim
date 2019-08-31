@@ -36,8 +36,29 @@ class LocalDB(context: Context) {
                 live.postValue(data)
             }
         }
-
         deleteOldMovies(startDate)
+    }
+
+    fun getAllMovieList(live: MutableLiveData<Movies>){
+        mHandler?.post {
+            mDataBase!!.userDao().getAllDB().apply {
+                var data = live.value
+                data?.mData?.clear()
+                data?.mData?.addAll(this)
+                live.postValue(data)
+            }
+        }
+    }
+
+    fun getFavorites(live: MutableLiveData<Movies>){
+        mHandler?.post {
+            mDataBase!!.userDao().getByFavorites(1).apply {
+                var data = live.value
+                data?.mData?.clear()
+                data?.mData?.addAll(this)
+                live.postValue(data)
+            }
+        }
     }
 
     fun insertMovies(movies: List<Movie>) {

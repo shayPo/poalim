@@ -7,7 +7,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.activity_movie.*
 import kotlinx.android.synthetic.main.movie_list_item.view.*
 import poalim.test.shay.R
 import poalim.test.shay.data.Network
@@ -36,7 +35,6 @@ class MovieListAdapter(val listener : OnItemClickListener) : RecyclerView.Adapte
 
     class MovieHolder(val v: View) : RecyclerView.ViewHolder(v) {
 
-
         private var mTitle : TextView
         private var mPoster : ImageView
         private var mFavorite : ImageView
@@ -49,7 +47,11 @@ class MovieListAdapter(val listener : OnItemClickListener) : RecyclerView.Adapte
 
         fun bind(data: Movie, listener: OnItemClickListener) {
             mTitle.text = data.mTitle
-            Glide.with(v.context.applicationContext).load(Network.IMAGE_URL + data.mPosterPath).into(mPoster)
+            Glide
+                .with(v.context.applicationContext)
+                .load(Network.IMAGE_URL + data.mPosterPath)
+                .error(R.drawable.no_image)
+                .into(mPoster)
             v.setOnClickListener{ listener.onItemClick(data) }
             mFavorite.setOnClickListener{ listener.onLikeClick(data) }
             mFavorite.setImageResource(if(data.mFavorite == 0)  R.drawable.not_like else R.drawable.like)

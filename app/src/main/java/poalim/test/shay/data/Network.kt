@@ -29,7 +29,7 @@ class Network
 
             override fun onResponse(call: Call<Movies>?, response: Response<Movies>?) {
                 val movies = response?.body()
-                Repository.Instance()!!.updateDateBase(movies!!.mData)
+                Repository.Instance()!!.updateDataBase(movies!!.mData)
                 live.value?.mData?.addAll(movies!!.mData)
                 live.postValue(live.value)
             }

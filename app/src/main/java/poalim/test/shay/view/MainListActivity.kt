@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,6 +27,7 @@ class MainListActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val adapter = MovieListAdapter(object : OnItemClickListener {
             override fun onItemClick(movie: Movie) {
+                //TODO add animation
                 val intent = Intent(this@MainListActivity, MovieActivity::class.java).apply {
                     putExtra(MOVIE_DATA, movie)
                 }
@@ -42,15 +44,23 @@ class MainListActivity : AppCompatActivity() {
         mMainListViewModel!!.getMovies().observe(this, Observer<Movies>{ movies ->
                 if(movies != null) { adapter.update(movies.getData()) }
             })
-
-        mMainListViewModel?.updateMovieList()
         movie_list.layoutManager = LinearLayoutManager(this)
         movie_list.adapter = adapter
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mMainListViewModel?.updateMovieList()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         mMainListViewModel = null
+    }
+
+    fun onDisplayFavorites(v : View){
+        val intent = Intent(this@MainListActivity, FavoritesActivity::class.java)
+        startActivity(intent)
     }
 
 }

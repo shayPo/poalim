@@ -23,9 +23,16 @@ class MovieActivity : AppCompatActivity()
         setContentView(R.layout.activity_movie)
         mMovieViewModel = ViewModelProviders.of(this, MovieViewModelFactory(intent.getParcelableExtra(MOVIE_DATA))).get(MovieViewModel::class.java)
         mMovieViewModel!!.getMovie().observe(this, Observer<Movie>{ movie ->
-                if(movie.mBackdropPath != null) {
-                    Glide.with(this@MovieActivity.applicationContext).load(Network.IMAGE_URL + movie.mBackdropPath)
+                if(!movie.mBackdropPath.isNullOrBlank()) {
+                    Glide
+                        .with(this@MovieActivity.applicationContext)
+                        .load(Network.IMAGE_URL + movie.mBackdropPath)
+                        .error(R.drawable.no_image)
                         .into(movie_image)
+                }
+                else
+                {
+                    movie_image.setImageResource(R.drawable.no_image)
                 }
                 is_liked.setImageResource(if(movie.mFavorite == 0)  R.drawable.not_like else R.drawable.like)
                 movie_title.text = resources.getString(R.string.title, movie.mTitle)
@@ -35,7 +42,7 @@ class MovieActivity : AppCompatActivity()
             })
     }
 
-    public fun isLikes(v : View)
+    fun isLikes(v : View)
     {
         mMovieViewModel!!.onLikeClick()
     }
